@@ -80,6 +80,11 @@
 
 using namespace Sexy;
 
+#ifdef __SWITCH__
+// Draws the controller-driven cursor arrow. Defined in platform/switch/Input.cpp
+void SwitchDrawVirtualCursor(Graphics& g, WidgetManager& theWidgetManager);
+#endif
+
 const int DEMO_FILE_ID = 0x42BEEF78;
 const int DEMO_VERSION = 2;
 
@@ -1789,6 +1794,15 @@ bool SexyAppBase::DrawDirtyStuff()
 			if (mPlayingDemoBuffer)
 				g.DrawImage(gDemoTimeLeftImage,mWidth-gDemoTimeLeftImage->GetWidth()-10,mHeight-gFPSImage->GetHeight()-gDemoTimeLeftImage->GetHeight()-15);
 		}
+
+#ifdef __SWITCH__
+		if (drewScreen)
+		{
+			// Controller cursor arrow, drawn on top of everything else
+			Graphics aCursorG(mGLInterface->GetScreenImage());
+			SwitchDrawVirtualCursor(aCursorG, *mWidgetManager);
+		}
+#endif
 
 		uint32_t aPreScreenBltTime = SDL_GetTicks();
 		mLastDrawTick = aPreScreenBltTime;

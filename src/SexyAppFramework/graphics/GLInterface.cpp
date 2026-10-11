@@ -1132,6 +1132,7 @@ void GLInterface::UpdateViewport()
 
 	vw = width; vh = height;
 
+#ifndef __SWITCH__
 	// Letterbox to 4:3
 	if (width * 3 > height * 4)
 	{
@@ -1143,6 +1144,10 @@ void GLInterface::UpdateViewport()
 		vh = width * 3 / 4;
 		vy = (height - vh) / 2;
 	}
+#endif
+	// On Switch the 4:3 game image is stretched over the whole 16:9 screen
+	// (no black bars). Touch input still maps correctly because RemapMouse
+	// scales X and Y independently using mPresentationRect.
 
 	glViewport(vx, vy, vw, vh);
 	mPresentationRect = Rect(vx, vy, vw, vh);
